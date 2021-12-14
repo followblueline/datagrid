@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2
+ * v1.2.2.1
  * 
 Upute:
 - include templatea i css-a:
@@ -149,6 +149,7 @@ props: {
         filterGeneralValue: {
             immediate: true,
             handler: function (newV, oldV) {
+                if (!this.source) return;
                 this.filterSource();
                 this.calculateCurrentPageRowsModified();
                 this.resetCurrentPage();
@@ -171,7 +172,7 @@ props: {
             return Math.ceil(this.totalRows / this.pageSize);
         },
         totalRows: function () {
-            return this.sourceModified.length;
+            return (this.sourceModified || []).length;
         },
         currentPageFirstItemNo: function () {
             return (this.currentPage - 1) * this.pageSize + 1;
@@ -220,6 +221,7 @@ props: {
     },
     methods: {
         init: function(data){
+            if (!this.source) return;
             //console.log('init source', this.source.length)
             if (this.filterGeneralColumns){
 			    this.filterGeneralColumnsWhitelist = this.filterGeneralColumns.split(',');
