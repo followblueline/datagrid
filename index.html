@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Vue mySelect</title>
+    <!-- https://cdn.jsdelivr.net/npm/vue -->
+    <script src="libs/vue.js"></script>
+
+    <!-- externi template za modal komponentu example -->
+    <script src="libs/datagrid.js"></script>
+	<link href="libs/datagrid.css" rel="stylesheet">
+    <script src="data/drzave.js"></script>
+    <style type="text/css">
+
+
+    </style>
+</head>
+<body>
+
+    <div id="vue-app">
+        <h1>Vue datagrid test</h1>
+
+        <datagrid key="datagrid1" ref="datagrid1"
+			:source="dataFiltered"
+			:columns="columns"
+			:filter-general-value="filter"
+			:filter-general-columns="'pozivni_broj,akronim,naziv'"
+			:filter-column-name="'unsupported'"
+			:filter-column-value="'unsupported'"
+			:table-class="'table_'"
+			:table-header-class="'header'"
+			:show-counter="true"
+			:show-expand="true"
+			:show-actions="true"
+			:paging-button-count="5"
+			:page-size="10"
+			:current-page-button-class="'current'"
+			:show-all-paging-buttons="false"
+			:button-text-first="'&laquo; First'"
+			:button-text-last="'Last &raquo;'"
+			:button-expand-text="'Expand'"
+			:button-collapse-text="'Collapse'"
+			>
+            <template v-slot:expandbtn>
+                više manje
+            </template>
+			<template v-slot:actions="rowdata">
+				<span>Actions...</span>
+                <button>Edit {{rowdata.akronim}}</button>
+			</template>
+            <template v-slot:details="rowdata">
+                <div class="container">
+                    <p>Row data: {{JSON.stringify(rowdata)}}</p>
+                    <p>{{rowdata.naziv}}<br />{{rowdata.pozivni_broj}}</p>
+                </div>
+            </template>
+        </datagrid>
+
+        <div style="clear:both;"></div>
+
+        <p>Content below (overflow test)</p>
+        <p><button type="button" @click="resetDatagrid">Reset current page</button></p>
+        <p>Filter data <input type="text" v-model="filter" /> {{filter}} s &#9650; and &#9660; or &#x25B2; and &#x25BC;</p>
+
+    </div>
+	
+    <script>
+		Vue.component('datagrid', dataGrid); // register
+        let columns = [
+            { data: 'pozivni_broj', title: 'Pozivni broj', width: 50, align: 'right', sortable: 'number' },
+            { data: 'akronim', title: 'Akronim', width: 70 },
+            { data: 'naziv', title: 'Naziv', sortable: true },
+            { data: 'originalni_naziv', title: 'Naziv EN', sortable: true },
+            { data: 'iban_kod', title: 'IBAN', sortable: true },
+        ];
+
+        // sama vue app za ovu stranicu
+        var vm = new Vue({
+            el: '#vue-app',
+            created: function () {
+                console.log("vue created");
+            },
+			mounted: function() {
+				let self = this;
+				setTimeout(function(){
+					self.drzave = drzave;
+				}, 300);
+			},
+            data: {
+                drzave: [],
+                columns: columns,
+                filter: '',
+                title: 'banana'
+            },
+            computed: {
+                dataFiltered: function () {
+                    return this.drzave;
+                }
+            },
+            methods: {
+                resetDatagrid: function () {
+                    
+                }
+			}
+        });
+
+		// returns null for NaN results
+		function convertToInt(val) {
+			if (val == null) return null;
+			var res = parseInt(val);
+			if (isNaN(res)) return null;
+			return res;
+		};
+
+    </script>
+</body>
+</html>
