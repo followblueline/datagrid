@@ -1,22 +1,23 @@
-    .datagrid_table { border-collapse: collapse; }
-    .datagrid_table thead{background-color: #fafafa;}
-    .datagrid_table th, .datagrid_table td {border: 1px solid #dbdbdb; }
-    .datagrid_table th {padding: 4px;font-weight: bold; position: relative; text-align: center !important;}
-    .datagrid_table td {padding: 2px;}
-    .datagrid_table .counter:after{content: '.';} /* counter ordinal */
-    .datagrid_table .counter{width: 20px; text-align:center;}
-    .datagrid_table .expand_collapse{width: 60px; text-align:center; cursor: pointer; color: #00a008;}
-    .datagrid_table tr.expanded td {border-bottom: 0; }
-    .datagrid_table tr.details td {border-top: 0;font-size: 95%;padding: 5px;color: #333; }
-    .datagrid_table tr.details .container {max-width: 700px; overflow: auto;}
-    .datagrid_paging button.current {background-color: #dde2ff;}
-    .datagrid_table tr:hover td {background-color: #ececec;}
-    .datagrid_paging .btn {cursor: pointer; cursor: pointer; margin: 2px; border-radius: 4px; padding: 4px 12px; min-width: 24px;}
-    .datagrid_paging .btn:hover {background-color: #dde2ff}
-    .datagrid_table .sort-desc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid rgb(226, 226, 226); position: absolute; top: 5px; right: 5px;/* display: inline-block; */cursor: pointer; margin-top: 5px;}
-    .datagrid_table .sort-asc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgb(226, 226, 226); position: absolute; top: 13px; right: 5px; /*display: inline-block;*/ cursor: pointer; margin-top: 5px;}
-    .datagrid_table .sortable:hover .sort-desc, .datagrid_table .sortable:hover .sort-asc {display: inline-block;}
-    .datagrid_table .sort-desc.active { border-bottom: 7px solid rgb(75, 75, 75); }
-    .datagrid_table .sort-asc.active { border-top: 7px solid rgb(75, 75, 75); }
-    .content table tbody tr:last-child td, .content table tbody tr:last-child th {border-bottom-width: initial;}
-    .datagrid_container .datagrid_info {padding: 2px 3px;}
+.datagrid_table { border-collapse: collapse; }
+.datagrid_table thead{background-color: #fafafa;}
+.datagrid_table th, .datagrid_table td {border: 1px solid #dbdbdb; }
+.datagrid_table th {padding: 4px;font-weight: bold; position: relative; text-align: center !important;}
+.datagrid_table td {padding: 2px;}
+.datagrid_table .counter:after{content: '.';} /* counter ordinal */
+.datagrid_table .counter{width: 20px; text-align:center;}
+.datagrid_table .expand_collapse{width: 60px; text-align:center; cursor: pointer; color: #00a008;}
+.datagrid_table tr.expanded td {border-bottom: 0; }
+.datagrid_table tr.details td {border-top: 0;font-size: 95%;padding: 5px;color: #333; }
+.datagrid_table tr.details .container {max-width: 700px; overflow: auto;}
+.datagrid_paging button.current {background-color: #dde2ff;}
+.datagrid_table tr:hover td {background-color: #ececec;}
+.datagrid_paging .btn {cursor: pointer; cursor: pointer; margin: 2px; border-radius: 4px; padding: 4px 12px; min-width: 24px;}
+.datagrid_paging .btn:hover {background-color: #dde2ff}
+.datagrid_table .sort-desc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid rgb(226, 226, 226); position: absolute; top: 5px; right: 5px;/* display: inline-block; */cursor: pointer; margin-top: 5px;}
+.datagrid_table .sort-asc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgb(226, 226, 226); position: absolute; top: 13px; right: 5px; /*display: inline-block;*/ cursor: pointer; margin-top: 5px;}
+.datagrid_table .sortable:hover .sort-desc, .datagrid_table .sortable:hover .sort-asc {display: inline-block;}
+.datagrid_table .sort-desc.active { border-bottom: 7px solid rgb(75, 75, 75);}
+.datagrid_table .sort-asc.active { border-top: 7px solid rgb(75, 75, 75); }
+.datagrid_table .sort-asc.sorted, .datagrid_table .sort-desc.sorted {display: inline-block;}
+.content table tbody tr:last-child td, .content table tbody tr:last-child th {border-bottom-width: initial;}
+.datagrid_container .datagrid_info {padding: 2px 3px;}

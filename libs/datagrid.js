@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.1
+ * v1.2.2.2
  * 
 Upute:
 - include templatea i css-a:
@@ -313,6 +313,7 @@ props: {
             //vm.$forceUpdate();
         },
         sortAsc: function (column) {
+            this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "ASC";
             let page = this.currentPage;
             this.sourceModified.sort(this.dynamicSort(column.data, column.sortable));
@@ -320,6 +321,7 @@ props: {
             //this.changePage(page);
         },
         sortDesc: function (column) {
+            this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "DESC";
             let page = this.currentPage;
             this.sourceModified.sort(this.dynamicSort("-" + column.data, column.sortable));
@@ -366,8 +368,8 @@ props: {
                     <th v-if="showCounter"><!-- counter column title --></th>
                     <th v-for="(col, index) in columnsModified" :class="[{'sortable': col.sortable}]" :style="[{'width': col.width ? col.width +'px' : 'auto'},{'text-align': col.align ? col.align : 'inherit'}]" :key="index">
                         {{ col.title }}
-                        <span class="sort-asc" :class="{'active': col.sorted == 'DESC'}" v-if="col.sortable" @click="sortToggle(col)"></span>
-                        <span class="sort-desc" :class="{'active': col.sorted == 'ASC' || col.sorted == undefined}"  v-if="col.sortable" @click="sortToggle(col)"></span>
+                        <span class="sort-asc" :class="{'sorted': col.sorted != undefined, 'active': col.sorted == 'DESC'}" v-if="col.sortable" @click="sortToggle(col)"></span>
+                        <span class="sort-desc" :class="{'sorted': col.sorted != undefined, 'active': col.sorted == 'ASC' || col.sorted == undefined}"  v-if="col.sortable" @click="sortToggle(col)"></span>
                     </th>
                     <th v-if="showExpand"><!-- expand column title --></th>
                     <th v-if="showActions"><!-- actions column title --></th>
