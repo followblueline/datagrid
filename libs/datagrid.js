@@ -43,6 +43,9 @@ Upute:
         { data: 'name_source_property', title: 'Name', width: 50, align: 'right', sortable: true },
         { data: 'id_source_property', title: 'Id' },
         { data: 'count_source_property', title: 'Count', sortable: 'number' },
+        { data: 'date_source_property', title: 'Date', sortable: true, sortingFunction: function(a,b){
+                return a.epoch - b.epoch;
+        }}
     ];
 
     For async load, reset in $nextTick:
