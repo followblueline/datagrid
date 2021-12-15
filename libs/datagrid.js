@@ -316,7 +316,11 @@ props: {
             this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "ASC";
             let page = this.currentPage;
-            this.sourceModified.sort(this.dynamicSort(column.data, column.sortable));
+            if (typeof(column.sortingFunction) == 'function'){
+                this.sourceModified.sort(column.sortingFunction);
+            } else {
+                this.sourceModified.sort(this.dynamicSort(column.data, column.sortable));
+            }
             this.calculateCurrentPageRowsModified();
             //this.changePage(page);
         },
@@ -324,7 +328,11 @@ props: {
             this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "DESC";
             let page = this.currentPage;
-            this.sourceModified.sort(this.dynamicSort("-" + column.data, column.sortable));
+            if (typeof(column.sortingFunction) == 'function'){
+                this.sourceModified.sort(column.sortingFunction).reverse();
+            } else {
+                this.sourceModified.sort(this.dynamicSort("-" + column.data, column.sortable));
+            }
             this.calculateCurrentPageRowsModified();
             //this.changePage(page);
         },
