@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.2
+ * v1.2.2.3
  * 
 Upute:
 - include templatea i css-a:
