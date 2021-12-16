@@ -15,7 +15,6 @@ Upute:
         key="datagrid1"
         :source="data_source"
         :columns="data_columns"
-        :filter-general-value="filter"
         :filter-general-columns="'column_data_source_names,title,company'"
         :table-class="'myTable'"
         :table-header-class="'header'"
@@ -63,10 +62,10 @@ props: {
             type: Array,
             default: []
         },
-        filterGeneralValue: {
-            type: String,
-            default: ''
-        },
+        // filterGeneralValue: {
+        //     type: String,
+        //     default: ''
+        // },
 		filterGeneralColumns: {
             type: String,
             default: ''
@@ -140,6 +139,7 @@ props: {
     //},
     data: function () {
         return {
+            filterGeneralValue: '',
             filterGeneralColumnsWhitelist: [], // white list for filter,
             currentPage: 1, // 1 based, 1 = first
             expandedRows: [], // list of expanded rows. if we use data attribute vue will not refresh upon change
@@ -398,10 +398,15 @@ props: {
     template: `    
 	<div class="datagrid_container">
         <div class="datagrid_header">
-            Show <select v-model.number="selectedPageSize">
-                <option v-for="option in pageSizeOptions">{{option}}</option>
-                <option v-if="pageSizeOptionsShowAll" value="all">All</option>
-            </select> entries
+            <span class="pageSize">    
+                Show 
+                <select v-model.number="selectedPageSize">
+                    <option v-for="option in pageSizeOptions">{{option}}</option>
+                    <option v-if="pageSizeOptionsShowAll" value="all">All</option>
+                </select> entries
+            </span>
+
+            <span class="search">Search: <input type="text" v-model="filterGeneralValue" /></span>
         </div>
         <table :class="['datagrid_table', tableClass]">
             <thead>

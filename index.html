@@ -23,7 +23,6 @@
         <datagrid key="datagrid1" ref="datagrid1"
 			:source="dataFiltered"
 			:columns="columns"
-			:filter-general-value="filter"
 			:filter-general-columns="'pozivni_broj,akronim,naziv'"
 			:table-class="'table_'"
 			:table-header-class="'header'"
@@ -60,7 +59,6 @@
 
         <p>Content below (overflow test)</p>
         <p><button type="button" @click="resetDatagrid">Reset current page</button></p>
-        <p>Filter data <input type="text" v-model="filter" /> {{filter}} s &#9650; and &#9660; or &#x25B2; and &#x25BC;</p>
 
     </div>
 	
@@ -72,6 +70,7 @@
             { data: 'naziv', title: 'Naziv', sortable: true },
             { data: 'originalni_naziv', title: 'Naziv EN', sortable: true },
             { data: 'iban_kod', title: 'IBAN', width: 100, sortable: true, sortingFunction: function(a,b){
+                let property = 'iban_kod';
                 if (a[property][0] == 'K' && b[property][0] != 'K') {
                     return -1;
                 } else if (a[property][0] == 'K' && b[property][0] == 'K') {
@@ -100,7 +99,6 @@
             data: {
                 drzave: [],
                 columns: columns,
-                filter: '',
                 title: 'banana'
             },
             computed: {

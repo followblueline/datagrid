@@ -1,4 +1,7 @@
-.datagrid_table { border-collapse: collapse; }
+.datagrid_container {display: inline-block;}
+.datagrid_header {padding: 5px 0;}
+.datagrid_header .search {float: right;}
+.datagrid_table { border-collapse: collapse; clear: both;}
 .datagrid_table thead{background-color: #fafafa;}
 .datagrid_table th, .datagrid_table td {border: 1px solid #dbdbdb; }
 .datagrid_table th {padding: 4px;font-weight: bold; position: relative; text-align: center !important;}
