@@ -123,6 +123,14 @@ props: {
         buttonCollapseText: {
             type: String,
             default: '-'
+        },
+        showExport: {
+            type: Boolean,
+            default: false
+        },
+        exportFilename: {
+            type: String,
+            default: 'datagrid_export'
         }
     },
     created: function () {
@@ -147,7 +155,8 @@ props: {
             currentPageRowsModified: [], // rebuild on expand
             currentPageRows: [],
             selectedPageSize: this.pageSizeDefault, // separate from pagesize for handling 'all' case and preselection in options list
-            pageSize: null
+            pageSize: null,
+            exportFormat: 'csv'
         }
     },
     //beforeUpdate: function () {
@@ -392,7 +401,83 @@ props: {
                     return result * sortOrder;
                 }
             }
+        },
+        exportData: function(){
+            switch(this.exportFormat){
+                case 'json': this.exportJson(); break;
+                case 'csv': this.exportCsv(); break;
+                case 'txt': this.exportText(); break;
+            }
+        },
+        exportJson: function(){
+            let content = []; // get rid of metadata
+            let self = this;
+            this.sourceModified.forEach(function(x) {
+                let x_ = self.cloneObj(x, self);
+                delete(x_['__index__']);
+                content.push(x_);
+            });
+            this.download(this.exportFilename, 'application/json', JSON.stringify(content, null, 2));
+        },
+        exportCsv: function(){
+            let separator = ';';
+            let colNames = this.columnsModified.map(c => c.data);
+            let content = `"sep=${separator}"\n`;
+            content += this.columnsModified.map(c => c.title).join(separator) + '\n'; // header
+            this.sourceModified.forEach((row) => {
+                colNames.forEach((column, i) => {
+                    content += escape(row[column]) + (i < colNames.length - 1 ? separator : '\n')
+                })
+            });
+
+            function escape(val){
+                if (val.includes('"')){
+                    val = val.replace(/\"/g,'""');
+                }
+                val = `"${val}"`;
+                return val;
+            }
+            this.download(this.exportFilename, 'text/csv', content)
+        },
+        exportText: function(){
+            let separator = '\t';
+            let colNames = this.columnsModified.map(c => c.data);
+            let content = this.columnsModified.map(c => c.title).join(separator) + '\n'; // header
+            this.sourceModified.forEach((row) => {
+                colNames.forEach((column, i) => {
+                    content += row[column] + (i < colNames.length - 1 ? separator : '\n')
+                })
+            });
+            this.download(this.exportFilename, 'text/plain', content)
+        },
+        download: function(filename, mimetype, content){
+            const anchor = document.createElement('a');
+            //anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
+            anchor.href = `data:${mimetype};charset=utf-8,${encodeURIComponent(content)}`;
+            anchor.target = '_blank';
+            anchor.download = filename || 'datagrid_export.txt';
+            anchor.click();
+        },
+        // deep clone
+        cloneObj: function(obj, thisRef) {
+            if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj){
+                return obj;
+            }
+            if (obj instanceof Date){
+                var temp = new Date(obj);//new obj.constructor(); //or new Date(obj);
+            } else {
+                var temp = obj.constructor();
+            }
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    obj['isActiveClone'] = null;
+                    temp[key] = thisRef.cloneObj(obj[key]);
+                    delete obj['isActiveClone'];
+                }
+            }
+            return temp;
         }
+    
     },
 
     template: `    
@@ -441,14 +526,25 @@ props: {
                 </tr>
             </tbody>
         </table>
-        <div :class="['datagrid_info']">
-            <span>Page {{currentPage}} of {{totalPages}}.</span>
-            <span style="padding-left: 5px;">Showing records {{currentPageFirstItemNo}} - {{currentPageLastItemNo}} out of {{totalRows}}.</span>
-        </div>
-        <div :class="['datagrid_paging']" v-show="totalPages > 1">
-            <template v-for="(button, index) in pagingButtons">
-                <button :key="index" type="button" @click="changePage(button.page)" :class="['btn', currentPage == button.page ? currentPageButtonClass : '']" v-html="button.text"></button>
-            </template>
+        <div class="datagrid_footer">
+            <div class="datagrid_info">
+                <span class="info_page">Page {{currentPage}} of {{totalPages}}.</span>
+                <span class="info_entries">Showing {{currentPageFirstItemNo}} to {{currentPageLastItemNo}} of {{totalRows}} entries</span>
+            </div>
+            <div class="datagrid_paging" v-show="totalPages > 1">
+                <template v-for="(button, index) in pagingButtons">
+                    <button :key="index" type="button" @click="changePage(button.page)" :class="['btn', currentPage == button.page ? currentPageButtonClass : '']" v-html="button.text"></button>
+                </template>
+            </div>
+            <div class="datagrid_export" v-show="showExport">
+                Export as 
+                    <select v-model="exportFormat">
+                        <option value="csv">csv</option>
+                        <option value="json">json</option>
+                        <option value="txt">txt</option>
+                    </select>
+                    <button @click="exportData" type="button">Download</button>
+            </div>
         </div>
     </div>
 `

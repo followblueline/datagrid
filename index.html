@@ -39,6 +39,8 @@
 			:button-text-last="'Last &raquo;'"
 			:button-expand-text="'Expand'"
 			:button-collapse-text="'Collapse'"
+            :show-export="true"
+            export-filename="table"
 			>
             <template v-slot:expandbtn>
                 više manje
@@ -67,8 +69,8 @@
         let columns = [
             { data: 'pozivni_broj', title: 'Pozivni broj', width: 80, align: 'right', sortable: 'number' },
             { data: 'akronim', title: 'Akronim', width: 100 },
-            { data: 'naziv', title: 'Naziv', sortable: true },
-            { data: 'originalni_naziv', title: 'Naziv EN', sortable: true },
+            { data: 'naziv', title: 'Naziv', width: 300, sortable: true },
+            { data: 'originalni_naziv', title: 'Naziv EN', width: 200, sortable: true },
             { data: 'iban_kod', title: 'IBAN', width: 100, sortable: true, sortingFunction: function(a,b){
                 let property = 'iban_kod';
                 if (a[property][0] == 'K' && b[property][0] != 'K') {

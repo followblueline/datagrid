@@ -24,3 +24,4 @@
 .datagrid_table .sort-asc.sorted, .datagrid_table .sort-desc.sorted {display: inline-block;}
 .content table tbody tr:last-child td, .content table tbody tr:last-child th {border-bottom-width: initial;}
 .datagrid_container .datagrid_info {padding: 2px 3px;}
+.datagrid_footer {display: flex; justify-content: space-between; padding: 5px 0;}
