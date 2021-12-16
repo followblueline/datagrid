@@ -21,6 +21,8 @@ Upute:
         :table-header-class="'header'"
         :show-counter="true"
         :page-size="5"
+        :page-size-options="[5,10,25]"
+        :page-size-options-show-all
         :paging-button-count="5"
         :current-page-button-class="'current'"
         :show-all-paging-buttons="false"
@@ -74,9 +76,17 @@ props: {
         showCounter: Boolean,
         showExpand: Boolean,
         showActions: Boolean,
-        pageSize: {
+        pageSizeDefault: {
             type: Number,
             default: 10
+        },
+        pageSizeOptions: {
+            type: Array,
+            default: () => [10, 25, 50]
+        },
+        pageSizeOptionsShowAll: {
+            type: Boolean,
+            default: false
         },
         tableClass: {
             type: String,
@@ -135,7 +145,9 @@ props: {
             expandedRows: [], // list of expanded rows. if we use data attribute vue will not refresh upon change
             sourceModified: [], // after filters and sorting
             currentPageRowsModified: [], // rebuild on expand
-            currentPageRows: []
+            currentPageRows: [],
+            selectedPageSize: this.pageSizeDefault, // separate from pagesize for handling 'all' case and preselection in options list
+            pageSize: null
         }
     },
     //beforeUpdate: function () {
@@ -157,6 +169,18 @@ props: {
                 this.calculateCurrentPageRowsModified();
                 this.resetCurrentPage();
             }
+        },
+        selectedPageSize: {
+            immediate: true,
+            handler: function(newV){
+                if (newV == 'all'){
+                    this.pageSize = (this.sourceModified || []).length;
+                } else {
+                    this.pageSize = newV;
+                }
+                this.currentPage = 1;
+                this.calculateCurrentPageRowsModified();
+            }
         }
     },
     computed: {
@@ -171,7 +195,7 @@ props: {
         totalPages: function () {
             //this.currentPage = 1; // reset on page count change
             if (!this.sourceModified) return 0;
-            if (!Number.isInteger(this.pageSize)) this.pageSize = 10;
+            //if (!Number.isInteger(this.pageSize)) this.pageSize = 10;
             return Math.ceil(this.totalRows / this.pageSize);
         },
         totalRows: function () {
@@ -373,6 +397,12 @@ props: {
 
     template: `    
 	<div class="datagrid_container">
+        <div class="datagrid_header">
+            Show <select v-model.number="selectedPageSize">
+                <option v-for="option in pageSizeOptions">{{option}}</option>
+                <option v-if="pageSizeOptionsShowAll" value="all">All</option>
+            </select> entries
+        </div>
         <table :class="['datagrid_table', tableClass]">
             <thead>
                 <tr :class="tableHeaderClass" valign="middle">
