@@ -16,8 +16,8 @@
 .datagrid_table tr:hover td {background-color: #ececec;}
 .datagrid_paging .btn {cursor: pointer; cursor: pointer; margin: 2px; border-radius: 4px; padding: 4px 12px; min-width: 24px;}
 .datagrid_paging .btn:hover {background-color: #dde2ff}
-.datagrid_table .sort-desc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid rgb(226, 226, 226); position: absolute; top: 5px; right: 5px;/* display: inline-block; */cursor: pointer; margin-top: 5px;}
-.datagrid_table .sort-asc {display:none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgb(226, 226, 226); position: absolute; top: 13px; right: 5px; /*display: inline-block;*/ cursor: pointer; margin-top: 5px;}
+.datagrid_table .sort-desc {display:none; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 8px solid rgb(226, 226, 226); position: absolute; top: 5px; right: 5px;/* display: inline-block; */cursor: pointer; margin-top: 5px;}
+.datagrid_table .sort-asc {display:none; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 8px solid rgb(226, 226, 226); position: absolute; top: 14px; right: 5px; /*display: inline-block;*/ cursor: pointer; margin-top: 5px;}
 .datagrid_table .sortable:hover .sort-desc, .datagrid_table .sortable:hover .sort-asc {display: inline-block;}
 .datagrid_table .sort-desc.active { border-bottom: 7px solid rgb(75, 75, 75);}
 .datagrid_table .sort-asc.active { border-top: 7px solid rgb(75, 75, 75); }
