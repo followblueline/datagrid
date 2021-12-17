@@ -540,13 +540,13 @@ props: {
                 </template>
             </div>
             <div class="datagrid_export" v-show="showExport">
-                Export as 
-                    <select v-model="exportFormat">
-                        <option value="csv">csv</option>
-                        <option value="json">json</option>
-                        <option value="txt">txt</option>
-                    </select>
-                    <button @click="exportData" type="button">Download</button>
+                <span>Export as</span>
+                <select v-model="exportFormat">
+                    <option value="csv">csv</option>
+                    <option value="json">json</option>
+                    <option value="txt">txt</option>
+                </select>
+                <button @click="exportData" type="button" class="button">Download</button>
             </div>
         </div>
     </div>

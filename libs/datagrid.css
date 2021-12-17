@@ -1,4 +1,5 @@
-.datagrid_container {display: inline-block;}
+/* inline-block for container to fit its content */
+.datagrid_container {/*display: inline-block;*/ padding: 15px;}
 .datagrid_header {padding: 5px 0;}
 .datagrid_header .search {float: right;}
 .datagrid_table { border-collapse: collapse; clear: both;}
@@ -25,3 +26,8 @@
 .content table tbody tr:last-child td, .content table tbody tr:last-child th {border-bottom-width: initial;}
 .datagrid_container .datagrid_info {padding: 2px 3px;}
 .datagrid_footer {display: flex; justify-content: space-between; padding: 5px 0;}
+
+.datagrid_container span {color: #777; padding: 0 4px;}
+.datagrid_container select {color: #777;}
+.datagrid_container input[type=text], .datagrid_container  select { padding: 4px 4px; border: 1px solid #ccc; border-radius: 3px;}
+.datagrid_container .datagrid_export select {margin-right: 5px;}
