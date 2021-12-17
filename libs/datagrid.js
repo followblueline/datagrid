@@ -21,7 +21,7 @@ Upute:
         :show-counter="true"
         :page-size="5"
         :page-size-options="[5,10,25]"
-        :page-size-options-show-all
+        :page-size-options-show-all="true"
         :paging-button-count="5"
         :current-page-button-class="'current'"
         :show-all-paging-buttons="false"
@@ -30,6 +30,8 @@ Upute:
         :show-expand="true"
         :button-expand-text="'Expand'"
         :button-collapse-text="'Collapse'"
+        :show-export="true"
+        export-filename="table"
         >
     </datagrid>
 
@@ -431,6 +433,7 @@ props: {
             });
 
             function escape(val){
+                if (!val) return '';
                 if (val.includes('"')){
                     val = val.replace(/\"/g,'""');
                 }
@@ -445,7 +448,7 @@ props: {
             let content = this.columnsModified.map(c => c.title).join(separator) + '\n'; // header
             this.sourceModified.forEach((row) => {
                 colNames.forEach((column, i) => {
-                    content += row[column] + (i < colNames.length - 1 ? separator : '\n')
+                    content += (row[column] || '') + (i < colNames.length - 1 ? separator : '\n')
                 })
             });
             this.download(this.exportFilename, 'text/plain', content)
