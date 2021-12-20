@@ -423,7 +423,7 @@ props: {
             } else {
                 return function (a, b) {
                     //var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                    var result = a[property].localeCompare(b[property]);
+                    var result = (a[property] || '').localeCompare(b[property] || '');
                     return result * sortOrder;
                 }
             }
