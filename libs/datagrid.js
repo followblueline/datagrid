@@ -458,7 +458,7 @@ props: {
 
             function escape(val){
                 if (!val) return '';
-                if (val.includes('"')){
+                if (val.toString().includes('"')){
                     val = val.replace(/\"/g,'""');
                 }
                 val = `"${val}"`;
