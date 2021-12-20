@@ -541,7 +541,7 @@ props: {
                         </td>
                     </template>
                     <template v-else>
-                        <td v-if="showCounter" class="counter">{{row["__index__"] + 1}}</td>
+                        <td v-if="showCounter" class="counter">{{((currentPage -1) * pageSize) + rowIndex + 1}}</td>
                         <td v-for="col in columns" :style="{'text-align': col.align ? col.align : 'inherit'}" :key="col.data"><slot :name="col.data" v-bind="row">{{ getColumnValue(row, col.data, rowIndex) }}</slot></td>
                         <td v-if="showExpand" class="expand_collapse">
                             <span class="expand_collapse" @click="expandRowToggle(row, row.__index__)">{{row.expanded ? buttonCollapseText : buttonExpandText}}</span>
