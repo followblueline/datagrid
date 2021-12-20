@@ -7,6 +7,7 @@ Dependencies: none
 
 ## History
 (versions with * have breaking changes)
+- 1.2.2.8     findAndHighlight
 - 1.2.2.7     Export to csv/json/txt
 - 1.2.2.6*    Integrated search into component. *filter-general-value has no function now.
 - 1.2.2.5*    page-size-options-show-all (true, false). *Old page-size property renamed to page-size-default

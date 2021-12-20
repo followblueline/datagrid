@@ -1,3 +1,12 @@
+/*
+* overrides:
+.datagrid {width: 100%;}
+.datagrid_table td.actions {max-width: 100px;}
+.datagrid_table tr:hover td {background-color: #f4f6fb;}
+.datagrid_table th, .datagrid_table td {border: 1px solid #dbdbdb; border-bottom: none !important;}
+.datagrid_table tr {border-bottom: 1px solid #dbdbdb;}
+*/
+
 /* inline-block for container to fit its content */
 .datagrid_container {/*display: inline-block;*/ padding: 15px;}
 .datagrid_header {padding: 5px 0;}
@@ -10,6 +19,7 @@
 .datagrid_table .counter:after{content: '.';} /* counter ordinal */
 .datagrid_table .counter{width: 20px; text-align:center;}
 .datagrid_table .expand_collapse{width: 60px; text-align:center; cursor: pointer; color: #00a008;}
+.datagrid_table tr.highlighted td {background-color: #e8ffe3;}
 .datagrid_table tr.expanded td {border-bottom: 0; }
 .datagrid_table tr.details td {border-top: 0;font-size: 95%;padding: 5px;color: #333; }
 .datagrid_table tr.details .container {max-width: 700px; overflow: auto;}

@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.3
+ * v1.2.2.8
  * 
 Upute:
 - include templatea i css-a:
@@ -55,6 +55,14 @@ Upute:
         this.$nextTick(() => {
             this.$refs.userlist.init();
         });
+
+- find and highlight record:
+    findAndHighlight: function(){
+        let findfunc = function(data){
+            return data.find(x => x.akronim == 'GIB');
+        }
+        this.$refs.datagrid1.findAndHighlight(findfunc);
+    }
 */
 
 // https://vuejs.org/v2/guide/components.html
@@ -158,7 +166,8 @@ props: {
             currentPageRows: [],
             selectedPageSize: this.pageSizeDefault, // separate from pagesize for handling 'all' case and preselection in options list
             pageSize: null,
-            exportFormat: 'csv'
+            exportFormat: 'csv',
+            highlightRowNo: null
         }
     },
     //beforeUpdate: function () {
@@ -275,6 +284,13 @@ props: {
             this.calculateCurrentPageRowsModified();
             this.resetCurrentPage();
         },
+        findAndHighlight: function(findfunc){
+            if (typeof(findfunc) != 'function') return;
+            let row = findfunc(this.sourceModified);
+            let newPage = Math.floor(row.__index__ /this.pageSize);
+            this.changePage(newPage + 1);
+            this.highlightRowNo = row.__index__;
+        },
         filterSource: function(){
             if (this.filterGeneralValue) {
                 let self = this;
@@ -303,6 +319,7 @@ props: {
             this.refreshCurrentPageRows();
             let pageRows = this.currentPageRows;
             this.currentPageRowsModified = [];
+            this.highlightRowNo = null;
             //console.log("pageRows", pageRows);
             //for (let i = pageRows.length - 1; i > 0; i--) {
             for (let i =0, j = pageRows.length; i < j; i++) {
@@ -510,7 +527,7 @@ props: {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, rowIndex) in currentPageRowsModified" :key="row.__index__" :class="[row.expanded ? 'expanded' : '', row.type == 'details' ? 'details' : '']">
+                <tr v-for="(row, rowIndex) in currentPageRowsModified" :key="row.__index__" :class="[row.expanded ? 'expanded' : '', row.type == 'details' ? 'details' : '', {'highlighted': row.__index__ == highlightRowNo}]">
                     <template v-if="row.type == 'details'">
                         <td :colspan="columns.length + (showExpand ? 1 : 0) + (showCounter ? 1 : 0) + (showActions ? 1 : 0)">
                             <slot name="details" v-bind="row"></slot>

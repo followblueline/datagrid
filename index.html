@@ -61,6 +61,7 @@
 
         <p>Content below (overflow test)</p>
         <p><button type="button" @click="resetDatagrid">Reset current page</button></p>
+        <p><button type="button" @click="findAndHighlight">Find and highlight</button></p>
 
     </div>
 	
@@ -109,6 +110,12 @@
                 }
             },
             methods: {
+                findAndHighlight: function(){
+                    let findfunc = function(data){
+                        return data.find(x => x.akronim == 'GIB');
+                    }
+                    this.$refs.datagrid1.findAndHighlight(findfunc);
+                },
                 resetDatagrid: function () {
                     
                 }
