@@ -33,6 +33,13 @@ Upute:
         :show-export="true"
         export-filename="table"
         >
+        <template v-slot:field_property="row">
+            Custom value display
+            <span :title="row.periodSecondsTotal + ' seconds'">{{formatTime(getPeriodsFromSeconds(row .periodSecondsTotal))}}</span>
+        </template>
+        <template v-slot:actions="row">
+            <button class="button reveal danger-btn" type="button" @click="removeItem(row)">Delete</button>
+        </template>
     </datagrid>
 
 

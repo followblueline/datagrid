@@ -5,6 +5,40 @@ Run with `node server.js`
 
 Dependencies: none
 
+Usage example:
+```
+    <datagrid
+        key="datagrid1"
+        :source="data_source"
+        :columns="data_columns"
+        :filter-general-columns="'column_data_source_names,title,company'"
+        :table-class="'myTable'"
+        :table-header-class="'header'"
+        :show-counter="true"
+        :page-size="5"
+        :page-size-options="[5,10,25]"
+        :page-size-options-show-all="true"
+        :paging-button-count="5"
+        :current-page-button-class="'current'"
+        :show-all-paging-buttons="false"
+        :button-text-first="'&laquo; First'"
+        :button-text-last="'Last &raquo;'"
+        :show-expand="true"
+        :button-expand-text="'Expand'"
+        :button-collapse-text="'Collapse'"
+        :show-export="true"
+        export-filename="table"
+        >
+        <template v-slot:field_property="row">
+            Custom value display
+            <span :title="row.periodSecondsTotal + ' seconds'">{{formatTime(getPeriodsFromSeconds(row .periodSecondsTotal))}}</span>
+        </template>
+        <template v-slot:actions="row">
+            <button class="button reveal danger-btn" type="button" @click="removeItem(row)">Delete</button>
+        </template>
+    </datagrid>
+```
+
 ## History
 (versions with * have breaking changes)
 - 1.2.2.8     findAndHighlight
