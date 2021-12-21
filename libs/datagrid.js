@@ -148,6 +148,10 @@ props: {
         exportFilename: {
             type: String,
             default: 'datagrid_export'
+        },
+        isLoading: {
+            type: Boolean,
+            default: false
         }
     },
     created: function () {
@@ -488,6 +492,9 @@ props: {
             anchor.download = filename || 'datagrid_export.txt';
             anchor.click();
         },
+        getColumnsNo: function(){
+            return this.columns.length + (this.showExpand ? 1 : 0) + (this.showCounter ? 1 : 0) + (this.showActions ? 1 : 0);
+        },
         // deep clone
         cloneObj: function(obj, thisRef) {
             if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj){
@@ -537,9 +544,12 @@ props: {
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="isLoading" class="loading">
+                    <td :colspan="getColumnsNo()"><span>Loading...</span></td>
+                </tr>
                 <tr v-for="(row, rowIndex) in currentPageRowsModified" :key="row.__index__" :class="[row.expanded ? 'expanded' : '', row.type == 'details' ? 'details' : '', {'highlighted': row.__index__ == highlightRowNo}]">
                     <template v-if="row.type == 'details'">
-                        <td :colspan="columns.length + (showExpand ? 1 : 0) + (showCounter ? 1 : 0) + (showActions ? 1 : 0)">
+                        <td :colspan="getColumnsNo()">
                             <slot name="details" v-bind="row"></slot>
                         </td>
                     </template>

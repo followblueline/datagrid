@@ -24,6 +24,7 @@
 			:source="dataFiltered"
 			:columns="columns"
 			:filter-general-columns="'pozivni_broj,akronim,naziv'"
+            :is-loading="isLoading"
 			:table-class="'table_'"
 			:table-header-class="'header'"
 			:show-counter="true"
@@ -94,15 +95,13 @@
                 console.log("vue created");
             },
 			mounted: function() {
-				let self = this;
-				setTimeout(function(){
-					self.drzave = drzave;
-				}, 300);
+				this.loadData();
 			},
             data: {
                 drzave: [],
                 columns: columns,
-                title: 'banana'
+                title: 'banana',
+                isLoading: false
             },
             computed: {
                 dataFiltered: function () {
@@ -110,6 +109,14 @@
                 }
             },
             methods: {
+                loadData: function(){
+                    let self = this;
+                    self.isLoading = true;
+                    setTimeout(function(){
+                        self.drzave = drzave;
+                        self.isLoading = false;
+                    }, 600);
+                },
                 findAndHighlight: function(){
                     let findfunc = function(data){
                         return data.find(x => x.akronim == 'GIB');

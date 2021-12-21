@@ -12,6 +12,7 @@ Usage example:
         :source="data_source"
         :columns="data_columns"
         :filter-general-columns="'column_data_source_names,title,company'"
+        :is-loading="isLoading"
         :table-class="'myTable'"
         :table-header-class="'header'"
         :show-counter="true"
@@ -41,6 +42,7 @@ Usage example:
 
 ## History
 (versions with * have breaking changes)
+- 1.2.2.9     isLoading
 - 1.2.2.8     findAndHighlight
 - 1.2.2.7     Export to csv/json/txt
 - 1.2.2.6*    Integrated search into component. *filter-general-value has no function now.
