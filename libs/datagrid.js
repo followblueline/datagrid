@@ -276,6 +276,9 @@ props: {
     methods: {
         init: function(data){
             if (!this.source) return;
+            if (!Array.isArray(this.source)) {
+                throw new Error('DataGrid error: source is not an array!');
+            }
             //console.log('init source', this.source.length)
             if (this.filterGeneralColumns){
 			    this.filterGeneralColumnsWhitelist = this.filterGeneralColumns.split(',');
