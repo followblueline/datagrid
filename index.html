@@ -23,7 +23,7 @@
         <datagrid key="datagrid1" ref="datagrid1"
 			:source="dataFiltered"
 			:columns="columns"
-			:filter-general-columns="'pozivni_broj,akronim,naziv'"
+			:filter-general-columns="'pozivni_broj,akronim,naziv,test_filter_prop'"
             :is-loading="isLoading"
 			:table-class="'table_'"
 			:table-header-class="'header'"
@@ -69,6 +69,7 @@
     <script>
 		Vue.component('datagrid', dataGrid); // register
         let columns = [
+            { data: 'test_filter_prop', title: 'Filter test', showColumnFilter:true, width: 80, align: 'right', sortable: 'number' },
             { data: 'pozivni_broj', title: 'Pozivni broj', width: 80, align: 'right', sortable: 'number' },
             { data: 'akronim', title: 'Akronim', width: 100 },
             { data: 'naziv', title: 'Naziv', width: 300, sortable: true },

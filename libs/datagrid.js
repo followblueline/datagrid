@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.8
+ * v1.2.2.10
  * 
 Upute:
 - include templatea i css-a:
@@ -50,7 +50,7 @@ Upute:
 - define columns inside Vue app. data = property name containing value, title = column heading
 
     let data_columns = [
-        { data: 'name_source_property', title: 'Name', width: 50, align: 'right', sortable: true },
+        { data: 'name_source_property', showColumnFilter: true, title: 'Name', width: 50, align: 'right', sortable: true },
         { data: 'id_source_property', title: 'Id' },
         { data: 'count_source_property', title: 'Count', sortable: 'number' },
         { data: 'date_source_property', title: 'Date', sortable: 'number', sortingFunction: function(a,b){
@@ -178,7 +178,8 @@ props: {
             selectedPageSize: this.pageSizeDefault, // separate from pagesize for handling 'all' case and preselection in options list
             pageSize: null,
             exportFormat: 'csv',
-            highlightRowNo: null
+            highlightRowNo: null,
+            columnFilters: null // {options: [], value}
         }
     },
     //beforeUpdate: function () {
@@ -297,6 +298,19 @@ props: {
             }
             this.calculateCurrentPageRowsModified();
             this.resetCurrentPage();
+            let self = this;
+            // build column filters if requested
+            this.columns.forEach(c => { 
+                if (c.showColumnFilter){
+                    if (!self.columnFilters)
+                        self.columnFilters = {};
+                    let unique = [...new Set(this.source.map(r => r[c.data]))];
+                    self.columnFilters[c.data] = {
+                        options: unique,
+                        value: null
+                    }
+                }
+            });
         },
         findAndHighlight: function(findfunc){
             if (typeof(findfunc) != 'function') return;
@@ -305,20 +319,46 @@ props: {
             this.changePage(newPage + 1);
             this.highlightRowNo = row.__index__;
         },
+        // general search
         filterSource: function(){
+            this.sourceModified = [];
+            // general search
+            let source_ = this.source;
             if (this.filterGeneralValue) {
                 let self = this;
                 let filter = this.filterGeneralValue.toLowerCase();
                 let whitelistLength = this.filterGeneralColumnsWhitelist.length;
-                this.sourceModified = this.source.filter(x => {
+                source_ = source_.filter(x => {
                     for(let i=0; i<whitelistLength; i++){
                         if ((x[self.filterGeneralColumnsWhitelist[i]] || '').toString().toLowerCase().includes(filter))
                             return true;
                     }
                 });
-            } else {
-                this.sourceModified = this.source;
             }
+            // columns filter
+            if (this.columnFilters){
+                Object.keys(this.columnFilters).forEach(key => {
+                    let filter = this.columnFilters[key];
+                    if (filter.value){
+                        source_ = source_.filter(x => {
+                            return x[key] == filter.value;
+                        })
+                    }
+                })
+            }
+            this.sourceModified = source_;
+        },
+        // column filter change
+        columnFilterChange: function(columnName){
+            this.filterSource(); // reset
+                            this.calculateCurrentPageRowsModified();
+                this.resetCurrentPage();
+            // //console.log('columnFilterChange', columnName, this.columnFilters);
+            // let value = this.columnFilters[columnName].value;
+            // Vue.$set(this.sourceModified,  this.sourceModified.filter(x => {
+            //     console.log(x[columnName], value)
+            //     return x[columnName] == value;
+            // })
         },
         resetCurrentPage: function () {
             this.currentPage = 1; // reset on page count change
@@ -538,6 +578,17 @@ props: {
                         {{ col.title }}
                         <span class="sort-asc" :class="{'sorted': col.sorted != undefined, 'active': col.sorted == 'DESC'}" v-if="col.sortable" @click="sortToggle(col)"></span>
                         <span class="sort-desc" :class="{'sorted': col.sorted != undefined, 'active': col.sorted == 'ASC' || col.sorted == undefined}"  v-if="col.sortable" @click="sortToggle(col)"></span>
+                    </th>
+                    <th v-if="showExpand"><!-- expand column title --></th>
+                    <th v-if="showActions"><!-- actions column title --></th>
+                </tr>
+                <tr v-if="columnFilters" class="columnFilters">
+                    <th v-if="showCounter"><!-- counter column title --></th>
+                    <th v-for="(col, index) in columnsModified" :key="index">
+                        <select v-if="col.showColumnFilter && columnFilters[col.data] && columnFilters[col.data].options" @change="columnFilterChange(col.data)" v-model="columnFilters[col.data].value">
+                            <option></option>
+                            <option v-for="val in columnFilters[col.data].options" :key="val">{{val}}</option>
+                        </select>
                     </th>
                     <th v-if="showExpand"><!-- expand column title --></th>
                     <th v-if="showActions"><!-- actions column title --></th>
