@@ -490,7 +490,7 @@ props: {
                 delete(x_['__index__']);
                 content.push(x_);
             });
-            this.download(this.exportFilename, 'application/json', JSON.stringify(content, null, 2));
+            this.download(this.exportFilename +'.json', 'application/json', JSON.stringify(content, null, 2));
         },
         exportCsv: function(){
             let separator = ';';
@@ -511,7 +511,7 @@ props: {
                 val = `"${val}"`;
                 return val;
             }
-            this.download(this.exportFilename, 'text/csv', content)
+            this.download(this.exportFilename + '.csv', 'text/csv', content)
         },
         exportText: function(){
             let separator = '\t';
@@ -522,7 +522,7 @@ props: {
                     content += (row[column] || '') + (i < colNames.length - 1 ? separator : '\n')
                 })
             });
-            this.download(this.exportFilename, 'text/plain', content)
+            this.download(this.exportFilename +'.txt', 'text/plain', content)
         },
         download: function(filename, mimetype, content){
             const anchor = document.createElement('a');
