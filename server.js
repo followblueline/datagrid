@@ -7,7 +7,7 @@
 const http = require('http');
 const fs = require('fs').promises;
 const util = require('util');
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 const defaultFile = 'index.html';
 
 
@@ -67,8 +67,8 @@ const requestListener = function (req, res) {
 }
 
 const server = http.createServer(requestListener);
-server.listen(port);
-console.log('Node.js web server at port '+port+' is running..');
+server.listen(PORT);
+console.log('Node.js web server at port '+PORT+' is running..');
 
 function checkForDefaultFile(url){
     if (url == '' || url == '/' || url == '\\')
