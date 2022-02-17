@@ -618,9 +618,12 @@ props: {
             </tbody>
         </table>
         <div class="datagrid_footer">
-            <div class="datagrid_info">
+            <div class="datagrid_info" v-if="totalRows > 0">
                 <span class="info_page">Page {{currentPage}} of {{totalPages}}.</span>
                 <span class="info_entries">Showing {{currentPageFirstItemNo}} to {{currentPageLastItemNo}} of {{totalRows}} entries</span>
+            </div>
+            <div class="datagrid_info" v-else>
+                {{totalRows}} entries
             </div>
             <div class="datagrid_paging" v-show="totalPages > 1">
                 <template v-for="(button, index) in pagingButtons">
