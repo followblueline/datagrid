@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.10
+ * v1.2.2.11
  * 
 Upute:
 - include templatea i css-a:
@@ -597,6 +597,9 @@ props: {
             <tbody>
                 <tr v-if="isLoading" class="loading">
                     <td :colspan="getColumnsNo()"><span>Loading...</span></td>
+                </tr>
+                <tr v-if="!isLoading && totalRows == 0" class="message">
+                    <td :colspan="getColumnsNo()"><span>No matching records found</span></td>
                 </tr>
                 <tr v-for="(row, rowIndex) in currentPageRowsModified" :key="row.__index__" :class="[row.expanded ? 'expanded' : '', row.type == 'details' ? 'details' : '', {'highlighted': row.__index__ == highlightRowNo}]">
                     <template v-if="row.type == 'details'">

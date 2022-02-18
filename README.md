@@ -42,6 +42,7 @@ Usage example:
 
 ## History
 (versions with * have breaking changes)
+- 1.2.2.11    No results message
 - 1.2.2.10    showColumnFilter
 - 1.2.2.9     isLoading
 - 1.2.2.8     findAndHighlight

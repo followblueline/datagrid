@@ -42,3 +42,4 @@
 .datagrid_container input[type=text], .datagrid_container  select { padding: 4px 4px; border: 1px solid #ccc; border-radius: 3px;}
 .datagrid_container .datagrid_export select {margin-right: 5px;}
 .datagrid_container .loading td {padding: 20px; text-align: center;}
+.datagrid_container .message td {padding: 20px; text-align: center;}
