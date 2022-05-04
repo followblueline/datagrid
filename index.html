@@ -27,6 +27,7 @@
             :is-loading="isLoading"
 			:table-class="'table_'"
 			:table-header-class="'header'"
+            :title="'Countries'"
 			:show-counter="true"
 			:show-expand="true"
 			:show-actions="true"
@@ -55,6 +56,9 @@
                     <p>Row data: {{JSON.stringify(rowdata)}}</p>
                     <p>{{rowdata.naziv}}<br />{{rowdata.pozivni_broj}}</p>
                 </div>
+            </template>
+            <template v-slot:no_records>
+                <p>No results</p>
             </template>
         </datagrid>
 

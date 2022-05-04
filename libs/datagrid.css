@@ -9,7 +9,8 @@
 
 /* inline-block for container to fit its content */
 .datagrid_container {/*display: inline-block;*/ padding: 15px;}
-.datagrid_header {padding: 5px 0;}
+.datagrid_header {padding: 5px 0; display: flex; justify-content: space-between;}
+.datagrid_header .title {font-size: 1.3rem;}
 .datagrid_header .search {float: right;}
 .datagrid_table { border-collapse: collapse; clear: both;}
 .datagrid_table thead{background-color: #fafafa;}

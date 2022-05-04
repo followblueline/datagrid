@@ -12,9 +12,9 @@ Usage example:
         :source="data_source"
         :columns="data_columns"
         :filter-general-columns="'column_data_source_names,title,company'"
-        :is-loading="isLoading"
         :table-class="'myTable'"
         :table-header-class="'header'"
+        :title="'Countries'"
         :show-counter="true"
         :page-size="5"
         :page-size-options="[5,10,25]"
@@ -37,11 +37,15 @@ Usage example:
         <template v-slot:actions="row">
             <button class="button reveal danger-btn" type="button" @click="removeItem(row)">Delete</button>
         </template>
+        <template v-slot:no_records>
+            <p>No results</p>
+        </template>
     </datagrid>
 ```
 
 ## History
 (versions with * have breaking changes)
+- 1.2.2.12    Table title, No results slot
 - 1.2.2.11    No results message
 - 1.2.2.10    showColumnFilter
 - 1.2.2.9     isLoading

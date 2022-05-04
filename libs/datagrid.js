@@ -1,7 +1,7 @@
 ﻿
 /*
  * Datagrid with paging
- * v1.2.2.11
+ * v1.2.2.12
  * 
 Upute:
 - include templatea i css-a:
@@ -18,6 +18,7 @@ Upute:
         :filter-general-columns="'column_data_source_names,title,company'"
         :table-class="'myTable'"
         :table-header-class="'header'"
+        :title="'Countries'"
         :show-counter="true"
         :page-size="5"
         :page-size-options="[5,10,25]"
@@ -39,6 +40,9 @@ Upute:
         </template>
         <template v-slot:actions="row">
             <button class="button reveal danger-btn" type="button" @click="removeItem(row)">Delete</button>
+        </template>
+        <template v-slot:no_records>
+            <p>No results</p>
         </template>
     </datagrid>
 
@@ -78,6 +82,10 @@ props: {
         source: {
             type: Array,
             default: []
+        },
+        title: {
+            type: String,
+            default: ''
         },
         // filterGeneralValue: {
         //     type: String,
@@ -567,7 +575,7 @@ props: {
                     <option v-if="pageSizeOptionsShowAll" value="all">All</option>
                 </select> entries
             </span>
-
+            <span class="title">{{title}}</span>
             <span class="search">Search: <input type="text" v-model="filterGeneralValue" /></span>
         </div>
         <table :class="['datagrid_table', tableClass]">
@@ -599,7 +607,11 @@ props: {
                     <td :colspan="getColumnsNo()"><span>Loading...</span></td>
                 </tr>
                 <tr v-if="!isLoading && totalRows == 0" class="message">
-                    <td :colspan="getColumnsNo()"><span>No matching records found</span></td>
+                    <td :colspan="getColumnsNo()">
+                        <slot name="no_records">    
+                            <span>No matching records found</span>
+                        </slot>
+                    </td>
                 </tr>
                 <tr v-for="(row, rowIndex) in currentPageRowsModified" :key="row.__index__" :class="[row.expanded ? 'expanded' : '', row.type == 'details' ? 'details' : '', {'highlighted': row.__index__ == highlightRowNo}]">
                     <template v-if="row.type == 'details'">
