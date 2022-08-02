@@ -3,11 +3,11 @@
  * Datagrid with paging
  * v1.2.2.12
  * 
-Upute:
-- include templatea i css-a:
-    
-    <script src="datagrid.js"></script>
-    <link href="datagrid.css" rel="stylesheet"/>
+
+- without NPM, include source with template and css:
+
+<script src="datagrid.js"></script>
+<link href="datagrid.css" rel="stylesheet"/>
 
 
 - add control to vue frontend:    
@@ -16,6 +16,7 @@ Upute:
         :source="data_source"
         :columns="data_columns"
         :filter-general-columns="'column_data_source_names,title,company'"
+        :is-loading="isLoading"
         :table-class="'myTable'"
         :table-header-class="'header'"
         :title="'Countries'"
@@ -48,11 +49,9 @@ Upute:
 
 
 - register component inside Vue app
-
     Vue.component('datagrid', dataGrid); // register
 
 - define columns inside Vue app. data = property name containing value, title = column heading
-
     let data_columns = [
         { data: 'name_source_property', showColumnFilter: true, title: 'Name', width: 50, align: 'right', sortable: true },
         { data: 'id_source_property', title: 'Id' },
@@ -62,9 +61,9 @@ Upute:
         }}
     ];
 
-    For async load, reset in $nextTick:
+- for async load, reset in $nextTick:
         this.$nextTick(() => {
-            this.$refs.userlist.init();
+            this.$refs.datagrid1.init();
         });
 
 - find and highlight record:
@@ -74,14 +73,15 @@ Upute:
         }
         this.$refs.datagrid1.findAndHighlight(findfunc);
     }
+
 */
 
 // https://vuejs.org/v2/guide/components.html
 let dataGrid = {
-props: {
+    props: {
         source: {
             type: Array,
-            default: []
+            default: () => []
         },
         title: {
             type: String,
@@ -165,11 +165,7 @@ props: {
     created: function () {
         this.init();
     },
-    // from child component just emit the change
-    // and let parent handle the change
     mounted: function () {
-        //console.log("dataGrid mounted", this.$vnode.key);
-        var self = this;
     },
     //beforeDestroy: function() {
     //    //document.removeEventListener('click', )
@@ -191,19 +187,18 @@ props: {
         }
     },
     //beforeUpdate: function () {
-    //    this.calculateCurrentPageRowsModified();
     //    console.log('beforeUpdate');
     //}, 
     watch: {
         source: {
             immediate: false,
-            handler: function (newV, oldV) {
+            handler: function () {
                 this.init();
             }
         },
         filterGeneralValue: {
             immediate: true,
-            handler: function (newV, oldV) {
+            handler: function () {
                 if (!this.source) return;
                 this.filterSource();
                 this.calculateCurrentPageRowsModified();
@@ -287,18 +282,16 @@ props: {
         }
     },
     methods: {
-        init: function(data){
+        init: function(){
             if (!this.source) return;
             if (!Array.isArray(this.source)) {
                 throw new Error('DataGrid error: source is not an array!');
             }
-            //console.log('init source', this.source.length)
             if (this.filterGeneralColumns){
-			    this.filterGeneralColumnsWhitelist = this.filterGeneralColumns.split(',');
-		    }
+                this.filterGeneralColumnsWhitelist = this.filterGeneralColumns.split(',');
+            }
             this.filterSource();
-            //console.log(`source.length %s, totalPages %s`, this.source.length, this.totalPages, data);
-            
+
             for (let i = 0, j = this.source.length; i < j; i++) {
                 let curr = this.source[i];
                 curr['__index__'] = i;
@@ -307,7 +300,6 @@ props: {
             this.calculateCurrentPageRowsModified();
             this.resetCurrentPage();
             let self = this;
-            // build column filters if requested
             this.columns.forEach(c => { 
                 if (c.showColumnFilter){
                     if (!self.columnFilters)
@@ -323,9 +315,11 @@ props: {
         findAndHighlight: function(findfunc){
             if (typeof(findfunc) != 'function') return;
             let row = findfunc(this.sourceModified);
-            let newPage = Math.floor(row.__index__ /this.pageSize);
-            this.changePage(newPage + 1);
-            this.highlightRowNo = row.__index__;
+            if (row){
+                let newPage = Math.floor(row.__index__ /this.pageSize);
+                this.changePage(newPage + 1);
+                this.highlightRowNo = row.__index__;
+            }
         },
         // general search
         filterSource: function(){
@@ -357,16 +351,10 @@ props: {
             this.sourceModified = source_;
         },
         // column filter change
-        columnFilterChange: function(columnName){
+        columnFilterChange: function(){
             this.filterSource(); // reset
-                            this.calculateCurrentPageRowsModified();
-                this.resetCurrentPage();
-            // //console.log('columnFilterChange', columnName, this.columnFilters);
-            // let value = this.columnFilters[columnName].value;
-            // Vue.$set(this.sourceModified,  this.sourceModified.filter(x => {
-            //     console.log(x[columnName], value)
-            //     return x[columnName] == value;
-            // })
+            this.calculateCurrentPageRowsModified();
+            this.resetCurrentPage();
         },
         resetCurrentPage: function () {
             this.currentPage = 1; // reset on page count change
@@ -382,31 +370,17 @@ props: {
             let pageRows = this.currentPageRows;
             this.currentPageRowsModified = [];
             this.highlightRowNo = null;
-            //console.log("pageRows", pageRows);
-            //for (let i = pageRows.length - 1; i > 0; i--) {
             for (let i =0, j = pageRows.length; i < j; i++) {
                 let curr = pageRows[i];
                 this.currentPageRowsModified.push(curr);
 
-                //if (curr.type && curr.type == 'details') continue;
-                let totalIndex = curr['__index__'];//this.getTotalIndex(i);
+                let totalIndex = curr['__index__'];
                 if (this.expandedRows.indexOf(totalIndex) > -1) {
                     this.currentPageRowsModified.push({ '__index__': totalIndex + 'd', type: 'details', rowdata: curr });
                 }
-
-                //curr['__expand__'] = false;
-                //if (curr['__expand__'] == true) {
-                //    pageRows.splice(i, 0, [{ sourceModified: curr }]);
-                //}
             }
         },
-        getColumnValue: function (row, colData, i) {
-            //if (colData == '__counter__') {
-            //    return (this.currentPage - 1) * this.pageSize + i + 1;
-            //} else if (colData == '__expand__') {
-            //    // ignore
-            //    return null;
-            //}
+        getColumnValue: function (row, colData) {
             return row[colData] || '';
         },
         changePage: function (page) {
@@ -425,33 +399,27 @@ props: {
                 this.expandedRows.push(ti);
             row.expanded = !isExpanded;
             this.calculateCurrentPageRowsModified();
-            //console.log(row, totalIndex);
-            //this.sourceModified[totalIndex]['__expand__'] = true;
             //vm.$forceUpdate();
         },
         sortAsc: function (column) {
             this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "ASC";
-            let page = this.currentPage;
             if (typeof(column.sortingFunction) == 'function'){
                 this.sourceModified.sort(column.sortingFunction);
             } else {
                 this.sourceModified.sort(this.dynamicSort(column.data, column.sortable));
             }
             this.calculateCurrentPageRowsModified();
-            //this.changePage(page);
         },
         sortDesc: function (column) {
             this.columns.forEach(c => { c.sorted = null; }); // reset others until multisorted funcionality
             column.sorted = "DESC";
-            let page = this.currentPage;
             if (typeof(column.sortingFunction) == 'function'){
                 this.sourceModified.sort(column.sortingFunction).reverse();
             } else {
                 this.sourceModified.sort(this.dynamicSort("-" + column.data, column.sortable));
             }
             this.calculateCurrentPageRowsModified();
-            //this.changePage(page);
         },
         sortToggle: function (column){
             if (column.sorted == 'ASC' || column.sorted == 'undefined'){
@@ -471,13 +439,11 @@ props: {
                 return function (a, b) {
                     let av = parseFloat(a[property]) || 0;
                     let bv = parseFloat(b[property]) || 0;
-                    //var result = (parseFloat(a[property]) || 0 < parseFloat(b[property]) || 0) ? -1 : (parseFloat(a[property] || 0) > parseFloat(b[property]) || 0) ? 1 : 0;
                     var result = (av < bv) ? -1 : (av > bv) ? 1 : 0;
                     return result * sortOrder;
                 }
             } else {
                 return function (a, b) {
-                    //var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
                     var result = (a[property] || '').localeCompare(b[property] || '');
                     return result * sortOrder;
                 }
@@ -514,7 +480,7 @@ props: {
             function escape(val){
                 if (!val) return '';
                 if (val.toString().includes('"')){
-                    val = val.replace(/\"/g,'""');
+                    val = val.replace(/"/g,'""');
                 }
                 val = `"${val}"`;
                 return val;
@@ -548,10 +514,11 @@ props: {
             if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj){
                 return obj;
             }
+            let temp = null;
             if (obj instanceof Date){
-                var temp = new Date(obj);//new obj.constructor(); //or new Date(obj);
+                temp = new Date(obj);
             } else {
-                var temp = obj.constructor();
+                temp = obj.constructor();
             }
             for (var key in obj) {
                 if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -565,13 +532,14 @@ props: {
     
     },
 
+
     template: `    
 	<div class="datagrid_container">
         <div class="datagrid_header">
             <span class="pageSize">    
                 Show 
                 <select v-model.number="selectedPageSize">
-                    <option v-for="option in pageSizeOptions">{{option}}</option>
+                    <option v-for="option in pageSizeOptions" :key="option">{{option}}</option>
                     <option v-if="pageSizeOptionsShowAll" value="all">All</option>
                 </select> entries
             </span>
