@@ -6,14 +6,16 @@ v.1.2.12
     <datagrid
         key="datagrid1"
         :source="data_source"
-        :columns="_data_columns"
-        :filter-general-value="filter"
-        :filter-general-columns="'column_data_source_names,title,company'"
+        :columns="data_columns"
         :is-loading="isLoading"
+        :filter-general-columns="'column_data_source_names,title,company'"
         :table-class="'myTable'"
         :table-header-class="'header'"
+        :title="'Countries'"
         :show-counter="true"
-        :page-size="5"
+        :page-size-default="5"
+        :page-size-options="[5,10,25]"
+        :page-size-options-show-all="true"
         :paging-button-count="5"
         :current-page-button-class="'current'"
         :show-all-paging-buttons="false"
@@ -22,6 +24,8 @@ v.1.2.12
         :show-expand="true"
         :button-expand-text="'Expand'"
         :button-collapse-text="'Collapse'"
+        :show-export="true"
+        export-filename="table"
         >
     </datagrid>
 

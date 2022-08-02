@@ -21,7 +21,7 @@
         :table-header-class="'header'"
         :title="'Countries'"
         :show-counter="true"
-        :page-size="5"
+        :page-size-default="5"
         :page-size-options="[5,10,25]"
         :page-size-options-show-all="true"
         :paging-button-count="5"
